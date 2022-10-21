@@ -8,13 +8,12 @@
         <button class="btn btn-primary" type="submit">+ tambah</button>
       </div>
     </div>
-    <div class="d-flex justify-content-xl-center">
+    <div class="d-flex flex-wrap justify-content-xl-center">
       <CardActivity title="Sport" />
       <CardActivity title="Food" />
       <CardActivity title="ssudo" />
+      <CardActivity title="Sport" />
     </div>
-
-
 
   </div>
 </template>
