@@ -23,11 +23,49 @@ const db = firebaseApp.firestore();
 export { db };
 
 export const getData = async () => {
-  db.collection('activity')
+  var data = [];
+  await db
+    .collection('activity')
     .get()
     .then((snapshot) => {
       snapshot.docs.forEach((doc) => {
-        console.log(doc.data());
+        data.push(doc.data());
       });
     });
+  return data;
+};
+
+export const deleteCategory = async (id) => {
+  db.collection('activity')
+    .where('category', '==', id)
+    .get()
+    .then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        doc.ref.delete();
+      });
+    });
+};
+
+export const addTask = async (name, priority, category, status) => {
+  db.collection('task').add({
+    name: name,
+    priority: priority,
+    category: category,
+    status: status,
+  });
+  console.log('Task added');
+};
+
+export const getDataTask = async (category) => {
+  var data = [];
+  await db
+    .collection('task')
+    .where('category', '==', category)
+    .get()
+    .then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        data.push(doc.data());
+      });
+    });
+  return data;
 };

@@ -5,105 +5,132 @@
         <h1 class="font-weight-bold">Activity</h1>
       </div>
       <div class="p-3 m-2">
-        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#newactivityCategory">+
-          tambah</button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#newactivityCategory"
+        >
+          + tambah
+        </button>
       </div>
     </div>
     <div class="d-flex flex-wrap justify-content-xl-center">
-      <CardActivity v-for="(item,index) in data" :key="index" :title="item.category" :date="item.createdAt" />
+      <CardActivity
+        v-for="(item, index) in data"
+        :key="index"
+        :title="item.category"
+        :date="item.createdAt"
+      />
     </div>
 
-
-    <div class="modal fade" id="newactivityCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
+    <div
+      class="modal fade"
+      id="newactivityCategory"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
               Tambah activity
             </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <div class="p-3">
-
-              <input v-model="category" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                placeholder="Masukan task" />
+              <input
+                v-model="category"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Masukan task"
+              />
             </div>
-
-
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
               Close
             </button>
-            <button type="button" @click="tambahKategori()" class="btn btn-primary" data-bs-dismiss="modal">
+            <button
+              type="button"
+              @click="tambahKategori()"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+            >
               Save changes
             </button>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import CardActivity from "../components/CardActivity.vue";
-import { db } from '@/firebase/index'
+import mitt from 'mitt';
+const emitter = mitt();
+import CardActivity from '../components/CardActivity.vue';
+import { db, getData } from '@/firebase/index';
 
 export default {
-  name: "HomeView",
+  name: 'HomeView',
   components: {
-    CardActivity
+    CardActivity,
   },
   data() {
     return {
       category: '',
       createdAt: '',
       data: [],
-
-
     };
   },
   methods: {
-    getData() {
-      db.collection('activity').get().then((snapshot) => {
-        snapshot.docs.forEach(doc => {
-          this.data.push(doc.data())
-        })
-      })
-      console.log(this.data)
-    },
     tambahKategori() {
-      console.log(this.category)
-      this.createdAt = new Date().toISOString().slice(0, 10)
+      console.log(this.category);
+      this.createdAt = new Date().toISOString().slice(0, 10);
       const activity = {
         category: this.category,
         createdAt: this.createdAt,
-      }
-      db.collection('activity').add(activity)
-      this.getData()
+      };
+      db.collection('activity').add(activity);
+      getData().then((data) => {
+        this.data = data;
+      });
     },
     routerGo(path) {
-      this.$router.push(path)
+      this.$router.push(path);
     },
-    async addActivity() {
-      this.createdAt = new Date()
-      const activity = {
-        category: this.category,
-        createdAt: this.createdAt,
-      }
-      await db.collection('activity').add(activity)
-    }
   },
-  mounted() {
-
-  },
+  mounted() {},
 
   created() {
-    this.getData()
-  }
+    // setInterval(() => {
+    //   getData().then((data) => {
+    //     this.data = data
+    //   })
+    // }, 100)
+    getData().then((data) => {
+      this.data = data;
+    });
+    setInterval();
+  },
+  watch: {
+    data() {
+      console.log(this.data);
+    },
+  },
 };
 </script>
 <style>
