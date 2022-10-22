@@ -1,0 +1,16 @@
+tugas project 2 : 
+membuat aplikasi to do list dengan menggunakan 
+- vue 3 
+- routing 
+- route param 
+
+fitur minimal : 
+- tambah task 
+- delete task 
+- edit task 
+- menceklist/unceklist task 
+- setiap task bisa punya 1 atau bbrp kategori
+- tampilakn task berdasarkan kategori nya 
+- tulis ke fire store 
+
+deadline : 25 oktober

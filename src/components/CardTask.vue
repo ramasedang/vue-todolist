@@ -48,6 +48,7 @@
                                 aria-describedby="emailHelp" placeholder="Masukan task">
                         </div>
                         <div class="m-3">
+                            <label for="selectPriority">Priority</label>
                             <select class="form-select" aria-label="Default select example">
                                 <option selected disabled>Prioritas</option>
                                 <option value="1">Very High</option>
@@ -55,6 +56,14 @@
                                 <option value="3">Normal</option>
                                 <option value="3">Low</option>
                                 <option value="3">Very Low</option>
+                            </select>
+                        </div>
+                        <div class="m-3">
+                            <label for="selectCategory">Activity Category</label>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected disabled>Category activity</option>
+                                <option value="1">{{ $route.params.id }}</option>
+                                <option value="2">2</option>
                             </select>
                         </div>
 
@@ -73,8 +82,29 @@
 </template>
 
 <script>
-export default {
 
+
+export default {
+    data() {
+        return {
+            dataCategory: [],
+            tasks: [],
+            task: {
+                name: '',
+                priority: '',
+                category: '',
+                status: false
+            }
+        }
+    },
+    created() {
+        // db.collection('activity').get().then((snapshot) => {
+        //     snapshot.docs.forEach(doc => {
+        //         this.dataCategory.push(doc.data())
+        //     })
+        // })
+        // console.log(this.dataCategory)
+    }
 }
 </script>
 
