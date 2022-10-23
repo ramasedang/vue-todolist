@@ -21,6 +21,7 @@
         :key="index"
         :title="item.category"
         :date="item.createdAt"
+        @delete="deleteActivity"
       />
     </div>
 
@@ -79,8 +80,6 @@
 </template>
 
 <script>
-import mitt from 'mitt';
-const emitter = mitt();
 import CardActivity from '../components/CardActivity.vue';
 import { db, getData } from '@/firebase/index';
 
@@ -97,6 +96,11 @@ export default {
     };
   },
   methods: {
+    deleteActivity() {
+      getData().then((data) => {
+        this.data = data;
+      });
+    },
     tambahKategori() {
       console.log(this.category);
       this.createdAt = new Date().toISOString().slice(0, 10);
@@ -116,21 +120,11 @@ export default {
   mounted() {},
 
   created() {
-    // setInterval(() => {
-    //   getData().then((data) => {
-    //     this.data = data
-    //   })
-    // }, 100)
     getData().then((data) => {
       this.data = data;
-    });
-    setInterval();
-  },
-  watch: {
-    data() {
       console.log(this.data);
-    },
-  },
+    });
+  }
 };
 </script>
 <style>

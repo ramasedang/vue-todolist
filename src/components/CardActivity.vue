@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { deleteCategory, getData } from '@/firebase/index';
+import { deleteCategory } from '@/firebase/index';
 export default {
   name: 'CardActivity',
   props: ['title', 'date'],
@@ -37,11 +37,10 @@ export default {
     routerGo(path) {
       this.$router.push(path);
     },
-    deleteActivity() {
-      deleteCategory(this.title);
-      getData().then((data) => {
-        this.$emit('data', data);
-      });
+    async deleteActivity() {
+      await deleteCategory(this.title);
+      this.$emit('delete');
+    
     },
   },
 };

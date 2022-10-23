@@ -22,6 +22,7 @@
                 type="button"
                 data-bs-toggle="modal"
                 data-bs-target="#edittaskModal"
+                @click="getCategory()"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +41,7 @@
                   />
                 </svg>
               </button>
-              <button class="ms-2 btn btn-sm bg-danger text-white">
+              <button class="ms-2 btn btn-sm bg-danger text-white" @click="delTask()">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -119,7 +120,7 @@
                 aria-label="Default select example"
                 v-model="task.category"
               >
-                <option selected disabled>Category activity</option>
+                <option selected="selected" disabled>{{$route.params.id}}</option>
                 <option
                   v-for="(data, index) in dataCategory"
                   :key="index"
@@ -129,6 +130,7 @@
                 </option>
               </select>
             </div>
+            
           </div>
           <div class="modal-footer">
             <button
@@ -154,7 +156,7 @@
 </template>
 
 <script>
-import { getData } from '@/firebase/index';
+import { getData, deleteTask } from '@/firebase/index';
 export default {
   props: ['nameTask', 'priorityTask', 'categoryTask', 'statusTask'],
   data() {
@@ -170,20 +172,22 @@ export default {
     };
   },
   methods: {
-    getCategory() {
+    async getCategory() {
       getData('category').then((data) => {
         this.dataCategory = data;
       });
     },
+    async delTask() {
+      deleteTask(this.nameTask)
+        .then(() => {
+          this.$emit('deleteTask');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   created() {
-    // db.collection('activity').get().then((snapshot) => {
-    //     snapshot.docs.forEach(doc => {
-    //         this.dataCategory.push(doc.data())
-    //     })
-    // })
-    // console.log(this.dataCategory)
-
     this.getCategory();
   },
 };

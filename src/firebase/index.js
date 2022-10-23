@@ -1,20 +1,15 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = {
-  apiKey: 'AIzaSyB44N4FJU2AcKDhNxogEAIzBsJU0ftSjyE',
-
-  authDomain: 'todo-pweb.firebaseapp.com',
-
-  projectId: 'todo-pweb',
-
-  storageBucket: 'todo-pweb.appspot.com',
-
-  messagingSenderId: '125640156625',
-
-  appId: '1:125640156625:web:34c994023294d2e3502cf0',
+  apiKey: "AIzaSyB44N4FJU2AcKDhNxogEAIzBsJU0ftSjyE",
+  authDomain: "todo-pweb.firebaseapp.com",
+  projectId: "todo-pweb",
+  storageBucket: "todo-pweb.appspot.com",
+  messagingSenderId: "125640156625",
+  appId: "1:125640156625:web:34c994023294d2e3502cf0",
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
@@ -22,10 +17,10 @@ const db = firebaseApp.firestore();
 
 export { db };
 
-export const getData = async () => {
+export const getData = async function () {
   var data = [];
   await db
-    .collection('activity')
+    .collection("activity")
     .get()
     .then((snapshot) => {
       snapshot.docs.forEach((doc) => {
@@ -36,8 +31,18 @@ export const getData = async () => {
 };
 
 export const deleteCategory = async (id) => {
-  db.collection('activity')
-    .where('category', '==', id)
+  await db
+    .collection("activity")
+    .where("category", "==", id)
+    .get()
+    .then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        doc.ref.delete();
+      });
+    });
+  await db
+    .collection("task")
+    .where("category", "==", id)
     .get()
     .then((snapshot) => {
       snapshot.docs.forEach((doc) => {
@@ -46,21 +51,33 @@ export const deleteCategory = async (id) => {
     });
 };
 
+export const deleteTask = async (id) => {
+  await db
+    .collection("task")
+    .where("name", "==", id)
+    .get()
+    .then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        doc.ref.delete();
+      });
+    });
+}
+
 export const addTask = async (name, priority, category, status) => {
-  db.collection('task').add({
+  await db.collection("task").add({
     name: name,
     priority: priority,
     category: category,
     status: status,
   });
-  console.log('Task added');
+  console.log("Task added");
 };
 
 export const getDataTask = async (category) => {
   var data = [];
   await db
-    .collection('task')
-    .where('category', '==', category)
+    .collection("task")
+    .where("category", "array-contains", category)
     .get()
     .then((snapshot) => {
       snapshot.docs.forEach((doc) => {
@@ -69,3 +86,28 @@ export const getDataTask = async (category) => {
     });
   return data;
 };
+
+export const updateCategory = async (oldName, newName) => {
+  await db
+    .collection("activity")
+    .where("category", "==", oldName)
+    .get()
+    .then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        doc.ref.update({
+          category: newName,
+        });
+      });
+    });
+  await db
+    .collection("task")
+    .where("category", "==", oldName)
+    .get()
+    .then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        doc.ref.update({
+          category: newName,
+        });
+      });
+    });
+}
