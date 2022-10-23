@@ -15,7 +15,7 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebaseApp.firestore();
 
-export { db };
+export {db};
 
 export const getData = async function () {
   var data = [];
@@ -61,7 +61,7 @@ export const deleteTask = async (id) => {
         doc.ref.delete();
       });
     });
-}
+};
 
 export const addTask = async (name, priority, category, status) => {
   await db.collection("task").add({
@@ -101,7 +101,7 @@ export const updateCategory = async (oldName, newName) => {
     });
   await db
     .collection("task")
-    .where("category", "==", oldName)
+    .where("category", "array-contains", oldName)
     .get()
     .then((snapshot) => {
       snapshot.docs.forEach((doc) => {
@@ -110,4 +110,27 @@ export const updateCategory = async (oldName, newName) => {
         });
       });
     });
-}
+};
+
+export const updateTask = async (
+  oldname,
+  newName,
+  category,
+  priority,
+  status
+) => {
+  await db
+    .collection("task")
+    .where("name", "==", oldname)
+    .get()
+    .then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        doc.ref.update({
+          name: newName,
+          category: category,
+          priority: priority,
+          status: status,
+        });
+      });
+    });
+};

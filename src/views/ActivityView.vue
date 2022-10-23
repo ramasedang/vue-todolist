@@ -67,22 +67,10 @@
                   <option value="Very Low">Very Low</option>
                 </select>
               </div>
-              <div class="m-3">
-                <label for="selectCategory">Activity Category</label>
-                <select class="form-select" aria-label="Default select example" v-model="task.category">
-                  <option selected disabled>Category activity</option>
-                  <option v-for="(data, index) in dataCategory" :key="index" :value="data.category">
-                    {{ data.category }}
-                  </option>
-                </select>
-              </div>
               <div v-for="(data, index) in dataCategory" :key="index" class="m-1">
                 <input class="form-check-input" type="checkbox" :value="data.category" v-model="categoryChecked" id="flexCheckDefault">
-                <label class="form-check-label ms-1" for="flexCheckDefault">
                   {{ data.category }}
-                </label>
               </div>
-              <h4>{{categoryChecked}}</h4>
 
             </div>
             <div class="modal-footer">
@@ -158,7 +146,7 @@
         addTask(
           this.task.name,
           this.task.priority,
-          this.task.category,
+          this.categoryChecked,
           this.task.status
         );
         this.getTask(this.$route.params.id);
