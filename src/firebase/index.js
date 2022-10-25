@@ -59,6 +59,7 @@ export const deleteTask = async (id) => {
     .then((snapshot) => {
       snapshot.docs.forEach((doc) => {
         doc.ref.delete();
+        console.log("delete task");
       });
     });
 };

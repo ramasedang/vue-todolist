@@ -7604,7 +7604,7 @@ vscode-uri@^3.0.2:
 
 vue-cli-plugin-vite@~1.5.0:
   version "1.5.0"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vite/-/vue-cli-plugin-vite-1.5.0.tgz#a12e4336743dc15d5e3b2d9e6244d54466e39689"
+  resolved "https://registry.npmmirror.com/vue-cli-plugin-vite/-/vue-cli-plugin-vite-1.5.0.tgz#a12e4336743dc15d5e3b2d9e6244d54466e39689"
   integrity sha512-CYisgIHfecTMYus/tSwvkWZXTTAyb7yxpzAps/Xl7JjfYR/sEYp7mfpcPHhcEB08mFUSDHxKPkPV9RpTgYi/JA==
   dependencies:
     "@types/semver" "7.3.4"

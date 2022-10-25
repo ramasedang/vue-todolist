@@ -7,7 +7,7 @@
             <div class="p-2">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                  @change="onChangeProcessed()" v-model="task.status" />
+                  @change="taskDone()" v-model="task.status" />
               </div>
             </div>
             <div class="p-2">{{ task.priority }}</div>
@@ -71,14 +71,14 @@
                 id="flexCheckDefault">
               {{ data.category }}
             </div>
-            <h1>{{newCategory}}</h1>
+            <h1>{{ newCategory }}</h1>
 
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="newTask()">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="updateTaskdetail()">
               Save changes
             </button>
           </div>
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { getData, deleteTask, getDataTask, updateTask } from '@/firebase/index';
+import { getData, deleteTask, getDataTask, db } from '@/firebase/index';
 export default {
   props: ['nameTask', 'priorityTask', 'categoryTask', 'statusTask'],
   data() {
@@ -97,6 +97,7 @@ export default {
       dataCategory: [],
       oldCategory: [],
       newCategory: [],
+      oldName: '',
       tasks: [],
       task: {
         name: this.nameTask,
@@ -108,9 +109,10 @@ export default {
   },
   methods: {
     async getCategory() {
-      getData('category').then((data) => {
+      await getData('category').then((data) => {
         this.dataCategory = data;
       });
+
     },
     async delTask() {
       deleteTask(this.nameTask)
@@ -127,19 +129,43 @@ export default {
       }).then(() => {
         this.tasks.forEach((data) => {
           this.oldCategory.push(data.category);
+          this.oldName = data.name;
         });
       });
-      console.log(this.oldCategory);
     },
 
-    change(event) {
-      this.task.status = event.target.value;
-    },
-    onChangeProcessed() {
-      console.log(this.task.status);
-    },
-    updateTaskdetail() {
+    async change(event) {
+      this.task.status = event.target.value
       
+    },
+    async taskDone() {
+      console.log(this.task.status)
+      
+         db
+        .collection("task")
+        .where("name", "==", this.task.name)
+        .get()
+        .then((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            doc.ref.update({
+              status: this.task.status,
+            });
+          });
+        });
+      
+    },
+    async updateTaskdetail() {
+      const task = {
+        name: this.task.name,
+        priority: this.task.priority,
+        category: this.newCategory,
+        status: this.task.status,
+      };
+      await db.collection('task').where("name", "==", this.oldName).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          doc.ref.update(task);
+        });
+      });
     },
   },
   created() {

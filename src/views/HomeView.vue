@@ -102,13 +102,14 @@ export default {
       });
     },
     tambahKategori() {
-      console.log(this.category);
       this.createdAt = new Date().toISOString().slice(0, 10);
       const activity = {
         category: this.category,
         createdAt: this.createdAt,
       };
+      
       db.collection('activity').add(activity);
+       
       getData().then((data) => {
         this.data = data;
       });
