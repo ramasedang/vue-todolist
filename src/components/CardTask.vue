@@ -55,16 +55,15 @@
                 aria-describedby="emailHelp" placeholder="Masukan task" />
             </div>
             <div class="m-3">
-              <label for="selectPriority">Priority</label>
-              <select class="form-select" aria-label="Default select example" v-model="task.priority">
-                <option selected disabled>Prioritas</option>
-                <option value="Very High">Very High</option>
-                <option value="High">High</option>
-                <option value="Normal">Normal</option>
-                <option value="Low">Low</option>
-                <option value="Very Low">Very Low</option>
-              </select>
-            </div>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected disabled>Prioritas</option>
+                                <option value="1">Very High</option>
+                                <option value="2">High</option>
+                                <option value="3">Normal</option>
+                                <option value="3">Low</option>
+                                <option value="3">Very Low</option>
+                            </select>
+                        </div>
             <p v-for="(data, index) in oldCategory" :key="index">{{ data[index] }}</p>
             <div v-for="(data, index) in dataCategory" :key="index" class="m-1">
               <input class="form-check-input" type="checkbox" :value="data.category" v-model="newCategory"
@@ -138,11 +137,7 @@ export default {
       this.task.status = event.target.value
       
     },
-<<<<<<< HEAD
     async taskDone() {
-=======
-    async onChangeProcessed() {
->>>>>>> 5fafdd238f983cbb3dce8781e87afc20cc776957
       console.log(this.task.status)
       
          db
