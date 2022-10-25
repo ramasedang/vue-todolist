@@ -113,25 +113,3 @@ export const updateCategory = async (oldName, newName) => {
     });
 };
 
-export const updateTask = async (
-  oldname,
-  newName,
-  category,
-  priority,
-  status
-) => {
-  await db
-    .collection("task")
-    .where("name", "==", oldname)
-    .get()
-    .then((snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        doc.ref.update({
-          name: newName,
-          category: category,
-          priority: priority,
-          status: status,
-        });
-      });
-    });
-};

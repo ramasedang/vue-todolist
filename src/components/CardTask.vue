@@ -138,7 +138,11 @@ export default {
       this.task.status = event.target.value
       
     },
+<<<<<<< HEAD
     async taskDone() {
+=======
+    async onChangeProcessed() {
+>>>>>>> 5fafdd238f983cbb3dce8781e87afc20cc776957
       console.log(this.task.status)
       
          db
